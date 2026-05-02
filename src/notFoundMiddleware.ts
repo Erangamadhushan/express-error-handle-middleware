@@ -6,5 +6,5 @@ export const notFoundMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  next(new ApiError(404, `Route ${req.originalUrl} not found`));
+  next(new ApiError("Route not found", 404, "NOT_FOUND"));
 };
