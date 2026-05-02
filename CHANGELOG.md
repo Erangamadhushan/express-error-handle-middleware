@@ -1,3 +1,13 @@
+# [1.6.0](https://github.com/Erangamadhushan/express-advanced-error-kit/compare/v1.5.1...v1.6.0) (2026-05-02)
+
+
+### Features
+
+* add createError helper for improved developer experience ([972d3d6](https://github.com/Erangamadhushan/express-advanced-error-kit/commit/972d3d683b855f058e7bca718f68ff5a475d2a0a))
+* add Dockerfile and .dockerignore for containerization ([3d1438a](https://github.com/Erangamadhushan/express-advanced-error-kit/commit/3d1438a256196b958b76e10d1a512086614c9b4b))
+* improve error response structure and add error codes ([20ab3ac](https://github.com/Erangamadhushan/express-advanced-error-kit/commit/20ab3ac64d6d1a4b5bd3ca3f301f19b5f51ae6ee))
+* update notFoundMiddleware to enhance error messaging ([2192e32](https://github.com/Erangamadhushan/express-advanced-error-kit/commit/2192e3256c62f1d737a33912ee33982eb06f35d2))
+
 ## [1.5.1](https://github.com/Erangamadhushan/express-advanced-error-kit/compare/v1.5.0...v1.5.1) (2026-02-28)
 
 
