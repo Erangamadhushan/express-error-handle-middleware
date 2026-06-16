@@ -4,6 +4,8 @@ Advanced TypeScript-based error handling middleware for Express.js.
 
 ![npm version](https://img.shields.io/npm/v/@erangamadhushan/express-advanced-error-kit)
 ![npm downloads](https://img.shields.io/npm/dm/@erangamadhushan/express-advanced-error-kit)
+![CI](https://img.shields.io/npm/ci/@erangamadhushan/express-advanced-error-kit)
+![License](https://img.shields.io/npm/l/@erangamadhushan/express-advanced-error-kit)
 
 ---
 
@@ -31,7 +33,7 @@ Advanced TypeScript-based error handling middleware for Express.js.
 npm install @erangamadhushan/express-advanced-error-kit
 ```
 
-# 🚀 Quick Start
+## 🚀 Quick Start
 
 ```ts
 import express from "express";
@@ -62,16 +64,16 @@ app.use(errorMiddleware());
 app.listen(5000);
 ```
 
-# 🧠 Recommended Workflow
-- Wrap all controllers using asyncHandler
--  Throw errors using:
-    - createError.* (recommended)
-    - or ApiError
-- Use global errorMiddleware
-- Integrate logger in production
+## 🧠 Recommended Workflow
 
-# 🧩 Error Creation Options
-##  Using createError (Recommended)
+- Wrap all controllers using asyncHandler.
+- Throw errors using createError.* (recommended) or ApiError.
+- Use global errorMiddleware.
+- Integrate a logger in production.
+
+## 🧩 Error Creation Options
+
+### Using createError (Recommended)
 
 ```ts
 throw createError.badRequest("Invalid input");
@@ -79,12 +81,13 @@ throw createError.notFound("User not found");
 throw createError.unauthorized();
 ```
 
-## Using ApiError
+### Using ApiError
+
 ```ts
 throw new ApiError("User not found", 404, "USER_NOT_FOUND");
 ```
 
-## Using Predefined Classes
+### Using Predefined Classes
 
 ```ts
 import { NotFoundError } from "...";
@@ -92,7 +95,7 @@ import { NotFoundError } from "...";
 throw new NotFoundError("User not found");
 ```
 
-# 📤 Response Format
+## 📤 Response Format
 
 All errors follow a consistent structure:
 
@@ -106,9 +109,9 @@ All errors follow a consistent structure:
 }
 ```
 
-# 🧠 Smart MongoDB Error Handling
+## 🧠 Smart MongoDB Error Handling
 
-## Duplicate key errors are automatically formatted:
+### Duplicate key errors are automatically formatted
 
 ```ts
 // Mongo duplicate key error
@@ -128,7 +131,7 @@ Response:
 }
 ```
 
-# 🧾 Zod Validation Formatting
+## 🧾 Zod Validation Formatting
 
 If using Zod:
 
@@ -146,7 +149,7 @@ Response:
 }
 ```
 
-# 🪵 Logger Integration
+## 🪵 Logger Integration
 
 Use any logger:
 
@@ -163,7 +166,7 @@ app.use(
 );
 ```
 
-# 📚 Middleware Order (Important)
+## 📚 Middleware Order (Important)
 
 ```js
 app.use(routes);
@@ -172,9 +175,9 @@ app.use(notFoundMiddleware);
 app.use(errorMiddleware());
 ```
 
-# 🧩 Creating Custom Errors
+## 🧩 Creating Custom Errors
 
-### 🔹 Using `createError` (Recommended)
+### Using createError (Recommended)
 
 ```ts
 import { createError } from "@erangamadhushan/express-advanced-error-kit";
@@ -184,7 +187,7 @@ throw createError.badRequest("Invalid input");
 throw createError.unauthorized();
 ```
 
-### 🔹 Using ApiError
+### Using ApiError
 
 ```ts
 import { ApiError } from "@erangamadhushan/express-advanced-error-kit";
@@ -192,7 +195,7 @@ import { ApiError } from "@erangamadhushan/express-advanced-error-kit";
 throw new ApiError("User not found", 404, "USER_NOT_FOUND");
 ```
 
-Also You can extend it:
+You can extend it like this:
 
 ```ts
 import { ApiError } from "@erangamadhushan/express-advanced-error-kit";
@@ -204,29 +207,36 @@ class ValidationError extends ApiError {
 }
 ```
 
-# ⚙️ Configuration Options
+## ⚙️ Configuration Options
 
 ```ts
-errorMiddleware({
-  logger?: (error: any) => void;
+errorMiddleware(options?: {
+  logger?: (error: unknown) => void;
   showStack?: boolean;
 });
 ```
 
-# 🛡 Production Behavior
+## 🛡 Production Behavior
 
 - Stack traces hidden automatically in production
 - Clean JSON response format
 - Centralized error control
 
-# 🧪 Testing
+## 🧪 Testing
+
 ```bash
 npm test
 ```
 
-🔄 Automated Releases
+## 🔄 Automated Releases
 
 - Conventional commits
 - semantic-release
 - GitHub Actions CI
 - Automatic versioning and changelog generation
+
+## Contributing
+
+Contributions are welcome!
+
+Please read CONTRIBUTING.md before opening a pull request.
