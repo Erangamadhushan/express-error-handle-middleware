@@ -1,5 +1,5 @@
 {
-  "name": "@erangamadhushan/express-advanced-error-kit",
+  "name": "@erangamadhushan/express-error-handle-middleware",
   "version": "1.6.0",
   "description": "Advanced TypeScript error handling middleware for Express applications.",
   "main": "./dist/index.cjs",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Erangamadhushan/express-advanced-error-kit.git"
+    "url": "git+https://github.com/Erangamadhushan/express-error-handle-middleware.git"
   },
   "keywords": [
     "express",
@@ -35,9 +35,9 @@
   "license": "MIT",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/Erangamadhushan/express-advanced-error-kit/issues"
+    "url": "https://github.com/Erangamadhushan/express-error-handle-middleware/issues"
   },
-  "homepage": "https://github.com/Erangamadhushan/express-advanced-error-kit#readme",
+  "homepage": "https://github.com/Erangamadhushan/express-error-handle-middleware#readme",
   "engines": {
     "node": ">=18.18"
   },

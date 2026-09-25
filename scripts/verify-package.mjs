@@ -39,13 +39,13 @@ try {
 
   execFileSync(
     process.execPath,
-    ["-e", "const kit = require('@erangamadhushan/express-advanced-error-kit'); if (!kit.errorMiddleware || !kit.ApiError) process.exit(1)"],
+    ["-e", "const kit = require('@erangamadhushan/express-error-handle-middleware'); if (!kit.errorMiddleware || !kit.ApiError) process.exit(1)"],
     { cwd: smokeDirectory, stdio: "inherit" },
   );
 
   execFileSync(
     process.execPath,
-    ["--input-type=module", "-e", "const kit = await import('@erangamadhushan/express-advanced-error-kit'); if (!kit.errorMiddleware || !kit.ApiError) process.exit(1)"],
+    ["--input-type=module", "-e", "const kit = await import('@erangamadhushan/express-error-handle-middleware'); if (!kit.errorMiddleware || !kit.ApiError) process.exit(1)"],
     { cwd: smokeDirectory, stdio: "inherit" },
   );
 } finally {
