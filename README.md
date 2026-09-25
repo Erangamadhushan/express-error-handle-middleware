@@ -1,11 +1,11 @@
-# @erangamadhushan/express-advanced-error-kit
+# @erangamadhushan/express-error-handle-middleware
 
 Advanced TypeScript-based error handling middleware for Express.js.
 
-![npm version](https://img.shields.io/npm/v/@erangamadhushan/express-advanced-error-kit)
-![npm downloads](https://img.shields.io/npm/dm/@erangamadhushan/express-advanced-error-kit)
-![CI](https://img.shields.io/npm/ci/@erangamadhushan/express-advanced-error-kit)
-![License](https://img.shields.io/npm/l/@erangamadhushan/express-advanced-error-kit)
+![npm version](https://img.shields.io/npm/v/@erangamadhushan/express-error-handle-middleware)
+![npm downloads](https://img.shields.io/npm/dm/@erangamadhushan/express-error-handle-middleware)
+![CI](https://img.shields.io/npm/ci/@erangamadhushan/express-error-handle-middleware)
+![License](https://img.shields.io/npm/l/@erangamadhushan/express-error-handle-middleware)
 
 ---
 
@@ -37,7 +37,7 @@ Advanced TypeScript-based error handling middleware for Express.js.
 ## 📦 Installation
 
 ```bash
-npm install @erangamadhushan/express-advanced-error-kit
+npm install @erangamadhushan/express-error-handle-middleware
 ```
 
 ## Compatibility
@@ -58,7 +58,7 @@ import {
   notFoundMiddleware,
   errorMiddleware,
   requestIdMiddleware,
-} from "@erangamadhushan/express-advanced-error-kit";
+} from "@erangamadhushan/express-error-handle-middleware";
 
 const app = express();
 app.use(express.json());
@@ -215,7 +215,7 @@ app.use(errorMiddleware());
 ### Using createError (Recommended)
 
 ```ts
-import { createError } from "@erangamadhushan/express-advanced-error-kit";
+import { createError } from "@erangamadhushan/express-error-handle-middleware";
 
 throw createError.notFound("User not found");
 throw createError.badRequest("Invalid input");
@@ -225,7 +225,7 @@ throw createError.unauthorized();
 ### Using ApiError
 
 ```ts
-import { ApiError } from "@erangamadhushan/express-advanced-error-kit";
+import { ApiError } from "@erangamadhushan/express-error-handle-middleware";
 
 throw new ApiError("User not found", 404, "USER_NOT_FOUND");
 ```
@@ -233,7 +233,7 @@ throw new ApiError("User not found", 404, "USER_NOT_FOUND");
 You can extend it like this:
 
 ```ts
-import { ApiError } from "@erangamadhushan/express-advanced-error-kit";
+import { ApiError } from "@erangamadhushan/express-error-handle-middleware";
 
 class ValidationError extends ApiError {
   constructor(message: string) {
@@ -269,7 +269,7 @@ Custom adapters can map application or library errors to `ApiError` instances. T
 import {
   ApiError,
   errorMiddleware,
-} from "@erangamadhushan/express-advanced-error-kit";
+} from "@erangamadhushan/express-error-handle-middleware";
 
 const domainErrorAdapter = (error: unknown) => {
   if (

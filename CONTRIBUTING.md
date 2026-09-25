@@ -2,7 +2,7 @@
 
 ## Development Setup
 
-git clone https://github.com/Erangamadhushan/express-advanced-error-kit
+git clone https://github.com/Erangamadhushan/express-error-handle-middleware
 npm install
 npm test
 
