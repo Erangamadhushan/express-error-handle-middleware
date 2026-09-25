@@ -2,13 +2,22 @@
   "name": "@erangamadhushan/express-advanced-error-kit",
   "version": "1.6.0",
   "description": "Advanced TypeScript error handling middleware for Express applications.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
+    "smoke:package": "npm run build && node scripts/verify-package.mjs",
     "prepublishOnly": "npm run build",
     "test": "jest --coverage"
   },
@@ -29,8 +38,17 @@
     "url": "https://github.com/Erangamadhushan/express-advanced-error-kit/issues"
   },
   "homepage": "https://github.com/Erangamadhushan/express-advanced-error-kit#readme",
+  "engines": {
+    "node": ">=18.18"
+  },
   "peerDependencies": {
+    "express": "^4.18.0 || ^5.0.0",
     "zod": "^4.3.6"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -48,10 +66,6 @@
     "ts-jest": "^29.4.6",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "zod": "^4.3.6"
-  },
-  "dependencies": {
-    "dotenv": "^17.3.1",
     "zod": "^4.3.6"
   }
 }

@@ -18,6 +18,7 @@ Advanced TypeScript-based error handling middleware for Express.js.
 - Global error middleware
 - 404 Not Found middleware
 - Logger integration (Pino, Winston, custom)
+- Custom error adapters
 - MongoDB duplicate key smart parsing
 - Zod validation error formatting
 - Standardized error response structure
@@ -32,6 +33,14 @@ Advanced TypeScript-based error handling middleware for Express.js.
 ```bash
 npm install @erangamadhushan/express-advanced-error-kit
 ```
+
+## Compatibility
+
+- Node.js 18.18 or newer
+- Express 4.18 or newer, including Express 5
+- Zod 4 is optional and only required when using Zod validation errors
+
+Express is a peer dependency because the middleware uses the host application's Express runtime. The package does not bundle Express, Zod, or other runtime dependencies.
 
 ## 🚀 Quick Start
 
@@ -213,7 +222,32 @@ class ValidationError extends ApiError {
 errorMiddleware(options?: {
   logger?: (error: unknown) => void;
   showStack?: boolean;
+  adapters?: ErrorAdapter[];
 });
+```
+
+Custom adapters can map application or library errors to `ApiError` instances. They run before the built-in MongoDB and Zod adapters.
+
+```ts
+import {
+  ApiError,
+  errorMiddleware,
+} from "@erangamadhushan/express-advanced-error-kit";
+
+const domainErrorAdapter = (error: unknown) => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "type" in error &&
+    error.type === "domain_error"
+  ) {
+    return new ApiError("The resource is in an invalid state", 409, "INVALID_STATE");
+  }
+
+  return undefined;
+};
+
+app.use(errorMiddleware({ adapters: [domainErrorAdapter] }));
 ```
 
 ## 🛡 Production Behavior
