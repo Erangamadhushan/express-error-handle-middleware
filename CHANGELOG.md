@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/Erangamadhushan/express-error-handle-middleware/compare/v1.6.0...v1.7.0) (2026-09-25)
+
+
+### Features
+
+* add support for custom error adapters and improve error handling ([5eec802](https://github.com/Erangamadhushan/express-error-handle-middleware/commit/5eec802e129acbd2fc675e79caf2fbe09688f4f6))
+* enhance error handling with request ID support and structured logging. Production features are implemented and validated. ([e5620f5](https://github.com/Erangamadhushan/express-error-handle-middleware/commit/e5620f5af8a993ef8ae1c91724807b082b8db441))
+* improve package quality and CI workflows ([984244c](https://github.com/Erangamadhushan/express-error-handle-middleware/commit/984244c8a1e4a133082be2c4eb257867605e60d5))
+
 # [1.6.0](https://github.com/Erangamadhushan/express-error-handle-middleware/compare/v1.5.1...v1.6.0) (2026-05-02)
 
 

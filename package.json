@@ -1,6 +1,6 @@
 {
   "name": "@erangamadhushan/express-error-handle-middleware",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Advanced TypeScript error handling middleware for Express applications.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
