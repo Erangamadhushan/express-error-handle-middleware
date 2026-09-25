@@ -289,3 +289,10 @@ npm test
 Contributions are welcome!
 
 Please read CONTRIBUTING.md before opening a pull request.
+
+## Engineering Documents
+
+- [Architecture](ARCHITECTURE.md)
+- [Error contract ADR](ADRs/001-error-contract.md)
+- [Adapter system ADR](ADRs/002-adapter-system.md)
+- [Compatibility matrix](COMPATIBILITY.md)
