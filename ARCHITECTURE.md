@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`@erangamadhushan/express-advanced-error-kit` provides a small, framework-specific error boundary for Express applications. It converts thrown values into stable HTTP responses while allowing applications to keep domain errors in their own code.
+`@erangamadhushan/express-error-handle-middleware` provides a small, framework-specific error boundary for Express applications. It converts thrown values into stable HTTP responses while allowing applications to keep domain errors in their own code.
 
 The package is not an application framework. It owns error contracts, normalization, response serialization, and Express integration; it does not own persistence, validation, authentication, or logging infrastructure.
 
