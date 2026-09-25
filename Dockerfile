@@ -1,20 +1,20 @@
-# Use Node LTS
 FROM node:22-alpine
 
-# Set working directory
-WORKDIR /app
+LABEL org.opencontainers.image.title="express-advanced-error-kit-validation"
+LABEL org.opencontainers.image.description="Validation environment for the Express error handling package"
 
-# Copy package files
+ENV NODE_ENV=test
+
+WORKDIR /workspace
+
 COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+RUN npm ci
 
-# Copy source code
 COPY . .
 
-# Build the package
-RUN npm run build
+RUN npx tsc --noEmit \
+	&& npm test -- --runInBand --silent \
+	&& npm run smoke:package
 
-# Default command (you can change this)
-CMD ["npm", "test"]
+CMD ["npm", "test", "--", "--runInBand", "--silent"]
