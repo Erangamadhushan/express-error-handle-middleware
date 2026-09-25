@@ -1,26 +1,35 @@
 import { ApiError } from "./ApiError";
+import {
+    BadRequestError,
+    ConflictError,
+    ForbiddenError,
+    InternalServerError,
+    NotFoundError,
+    UnauthorizedError,
+    ValidationError,
+} from "./errors";
 
 export const createError = {
     badRequest: (message = "Bad request") =>
-        new ApiError(message, 400, "BAD_REQUEST"),
+        new BadRequestError(message),
 
     unauthorized: (message = "Unauthorized") =>
-        new ApiError(message, 401, "UNAUTHORIZED"),
+        new UnauthorizedError(message),
 
     forbidden: (message = "Forbidden") =>
-        new ApiError(message, 403, "FORBIDDEN"),
+        new ForbiddenError(message),
 
     notFound: (message = "Resource not found") =>
-        new ApiError(message, 404, "NOT_FOUND"),
+        new NotFoundError(message),
 
     conflict: (message = "Conflict") =>
-        new ApiError(message, 409, "CONFLICT"),
+        new ConflictError(message),
 
     validation: (message = "Validation error") =>
-        new ApiError(message, 400, "VALIDATION_ERROR"),
+        new ValidationError(message),
 
     internal: (message = "Internal Server Error") =>
-        new ApiError(message, 500, "INTERNAL_ERROR"),
+        new InternalServerError(message),
 
     // Custom flexible error
     custom: (

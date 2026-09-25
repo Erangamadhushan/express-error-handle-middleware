@@ -18,6 +18,7 @@ Advanced TypeScript-based error handling middleware for Express.js.
 - Global error middleware
 - 404 Not Found middleware
 - Logger integration (Pino, Winston, custom)
+- Custom error adapters
 - MongoDB duplicate key smart parsing
 - Zod validation error formatting
 - Standardized error response structure
@@ -33,6 +34,14 @@ Advanced TypeScript-based error handling middleware for Express.js.
 npm install @erangamadhushan/express-advanced-error-kit
 ```
 
+## Compatibility
+
+- Node.js 18.18 or newer
+- Express 4.18 or newer, including Express 5
+- Zod 4 is optional and only required when using Zod validation errors
+
+Express is a peer dependency because the middleware uses the host application's Express runtime. The package does not bundle Express, Zod, or other runtime dependencies.
+
 ## 🚀 Quick Start
 
 ```ts
@@ -42,10 +51,12 @@ import {
   createError,
   notFoundMiddleware,
   errorMiddleware,
+  requestIdMiddleware,
 } from "@erangamadhushan/express-advanced-error-kit";
 
 const app = express();
 app.use(express.json());
+app.use(requestIdMiddleware());
 
 app.get(
   "/users/:id",
@@ -160,11 +171,13 @@ const logger = pino();
 
 app.use(
   errorMiddleware({
-    logger: logger.error.bind(logger),
+    logger: (error, context) => logger.error({ error, ...context }),
     showStack: false,
   }),
 );
 ```
+
+The logger receives the normalized error and structured request context containing `requestId`, `method`, `url`, `path`, `statusCode`, `code`, and `errorName`.
 
 ## 📚 Middleware Order (Important)
 
@@ -211,9 +224,45 @@ class ValidationError extends ApiError {
 
 ```ts
 errorMiddleware(options?: {
-  logger?: (error: unknown) => void;
+  logger?: (error: unknown, context: ErrorLogContext) => void;
   showStack?: boolean;
+  expose?: boolean | ((error: ApiError, context: ErrorRequestContext) => boolean);
+  responseFormat?: "legacy" | "problem";
+  serializer?: (error: ApiError, context: ErrorSerializationContext) => unknown;
+  requestId?: {
+    headerName?: string;
+    generator?: () => string;
+  };
+  adapters?: ErrorAdapter[];
 });
+```
+
+Request IDs are read from `x-request-id` by default, generated when absent, returned in the response header, and exposed through the logger and serializer context. Use `requestIdMiddleware()` near the start of the application to correlate successful requests as well as failures. Set `responseFormat: "problem"` for an RFC 9457-style response with `application/problem+json` content type.
+
+Use `expose` to control whether an error message is returned. In production, 500-level messages are hidden by default.
+
+Custom adapters can map application or library errors to `ApiError` instances. They run before the built-in MongoDB and Zod adapters.
+
+```ts
+import {
+  ApiError,
+  errorMiddleware,
+} from "@erangamadhushan/express-advanced-error-kit";
+
+const domainErrorAdapter = (error: unknown) => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "type" in error &&
+    error.type === "domain_error"
+  ) {
+    return new ApiError("The resource is in an invalid state", 409, "INVALID_STATE");
+  }
+
+  return undefined;
+};
+
+app.use(errorMiddleware({ adapters: [domainErrorAdapter] }));
 ```
 
 ## 🛡 Production Behavior
