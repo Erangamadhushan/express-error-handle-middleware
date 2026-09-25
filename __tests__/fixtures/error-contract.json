@@ -10,6 +10,7 @@
     "success": false,
     "statusCode": 500,
     "message": "Internal Server Error",
-    "error": "Error"
+    "error": "ApiError",
+    "code": "INTERNAL_ERROR"
   }
 }

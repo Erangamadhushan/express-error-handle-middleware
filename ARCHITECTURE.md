@@ -8,9 +8,9 @@ The package is not an application framework. It owns error contracts, normalizat
 
 ## Current Repository Baseline
 
-This documentation branch is based on the pre-Phase-2 implementation. The current committed middleware still performs MongoDB and Zod recognition inside `errorMiddleware`, and the current package metadata does not yet contain the conditional exports and peer-dependency changes described in the later package-quality phase.
+The package-quality, architectural-separation, and production-feature changes are integrated in this branch. The current implementation provides conditional package exports, typed adapters, request correlation, structured logger context, configurable exposure, custom serializers, and optional problem-details responses.
 
-The decisions below define the target architecture that subsequent implementation branches must preserve. The contract fixtures in `__tests__/contract` protect the behavior that already exists in this checkout while the target architecture is brought back into alignment.
+The contract fixtures in `__tests__/contract` protect the public response behavior while these capabilities evolve.
 
 ## Request Flow
 

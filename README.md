@@ -18,10 +18,16 @@ Advanced TypeScript-based error handling middleware for Express.js.
 - Global error middleware
 - 404 Not Found middleware
 - Logger integration (Pino, Winston, custom)
+- Request ID and correlation metadata
+- Structured logger context
 - Custom error adapters
+- Reusable adapter registry
 - MongoDB duplicate key smart parsing
 - Zod validation error formatting
 - Standardized error response structure
+- RFC 9457-style problem details
+- Custom response serializers
+- Configurable message exposure
 - Production-safe stack handling
 - ESM + CommonJS support
 - Full TypeScript support
@@ -79,8 +85,10 @@ app.listen(5000);
 
 - Wrap all controllers using asyncHandler.
 - Throw errors using createError.* (recommended) or ApiError.
+- Add requestIdMiddleware near the start of the application.
 - Use global errorMiddleware.
 - Integrate a logger in production.
+- Use problem details or a custom serializer when an API-specific response contract is required.
 
 ## 🧩 Error Creation Options
 
@@ -117,6 +125,20 @@ All errors follow a consistent structure:
   "message": "User not found",
   "error": "NotFoundError",
   "code": "NOT_FOUND"
+}
+```
+
+The legacy response format is the default for compatibility. Enable RFC 9457-style responses with `responseFormat: "problem"`:
+
+```json
+{
+  "type": "urn:express-error-kit:NOT_FOUND",
+  "title": "NotFoundError",
+  "status": 404,
+  "detail": "User not found",
+  "instance": "/users/42",
+  "code": "NOT_FOUND",
+  "requestId": "request-123"
 }
 ```
 
@@ -233,7 +255,7 @@ errorMiddleware(options?: {
     headerName?: string;
     generator?: () => string;
   };
-  adapters?: ErrorAdapter[];
+  adapters?: readonly ErrorAdapter[] | ErrorAdapterRegistry;
 });
 ```
 
@@ -265,16 +287,32 @@ const domainErrorAdapter = (error: unknown) => {
 app.use(errorMiddleware({ adapters: [domainErrorAdapter] }));
 ```
 
+For shared application configuration, register adapters once and reuse the registry:
+
+```ts
+const adapters = new ErrorAdapterRegistry()
+  .register(domainErrorAdapter);
+
+app.use(errorMiddleware({ adapters }));
+```
+
 ## 🛡 Production Behavior
 
 - Stack traces hidden automatically in production
-- Clean JSON response format
-- Centralized error control
+- 500-level messages hidden automatically in production
+- Request IDs returned through the response header
+- Structured context available to loggers and serializers
+- Clean legacy JSON or problem-details response formats
+- Centralized error normalization and exposure control
 
 ## 🧪 Testing
 
 ```bash
-npm test
+npm ci
+npm test -- --runInBand
+npx tsc --noEmit
+npm run build
+npm run smoke:package
 ```
 
 ## 🔄 Automated Releases

@@ -30,11 +30,9 @@ npm run build
 npm run smoke:package
 ```
 
-The current documentation branch predates the package-quality metadata and production-feature implementation. Before release, verify that `package.json`, generated declarations, conditional exports, peer dependencies, request context, adapters, and serializers all match these documents.
+The package-quality metadata and production-feature implementation are integrated into this branch. Keep `package.json`, generated declarations, conditional exports, peer dependencies, request context, adapters, and serializers aligned with these documents.
 
 ## Compatibility Note Template
-
-Use this structure in a pull request or release note when changing the public API:
 
 ```md
 ### Compatibility
