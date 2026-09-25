@@ -315,6 +315,15 @@ npm run build
 npm run smoke:package
 ```
 
+## Docker Validation
+
+The repository Dockerfile is a reproducible validation image for contributors and CI. It runs the typecheck, test suite, package build, and packed-package smoke test; it is not a production runtime image because this project publishes an npm library rather than an Express application.
+
+```bash
+docker build --tag express-error-handle-kit-validation .
+docker run --rm express-error-handle-kit-validation
+```
+
 ## 🔄 Automated Releases
 
 - Conventional commits
