@@ -1,5 +1,6 @@
 import { ApiError } from "./ApiError";
 import { mongoDuplicateKeyAdapter, zodErrorAdapter } from "./adapters/index";
+import { ErrorAdapterRegistry } from "./types";
 import type { ErrorAdapter } from "./types";
 
 const defaultAdapters: readonly ErrorAdapter[] = [
@@ -9,13 +10,17 @@ const defaultAdapters: readonly ErrorAdapter[] = [
 
 export const normalizeError = (
   error: unknown,
-  adapters: readonly ErrorAdapter[] = [],
+  adapters: readonly ErrorAdapter[] | ErrorAdapterRegistry = [],
 ): ApiError => {
   if (error instanceof ApiError) {
     return error;
   }
 
-  for (const adapter of [...adapters, ...defaultAdapters]) {
+  const registeredAdapters = adapters instanceof ErrorAdapterRegistry
+    ? adapters.getAdapters()
+    : adapters;
+
+  for (const adapter of [...registeredAdapters, ...defaultAdapters]) {
     const normalizedError = adapter(error);
     if (normalizedError) {
       return normalizedError;

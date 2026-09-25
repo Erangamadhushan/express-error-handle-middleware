@@ -7,6 +7,8 @@ import { asyncHandler } from "../src/asyncHandler";
 import { ApiError } from "../src/ApiError";
 import { errorMiddleware } from "../src/errorMiddleware";
 import { createError } from "../src/createError";
+import { requestIdMiddleware } from "../src/requestContext";
+import { ErrorAdapterRegistry } from "../src/types";
 
 describe("errorMiddleware", () => {
   const originalNodeEnv = process.env.NODE_ENV;
@@ -83,6 +85,127 @@ describe("errorMiddleware", () => {
       message: "The resource is in an invalid state",
       code: "INVALID_STATE",
     });
+  });
+
+  test("should reuse an incoming request ID and provide structured logger context", async () => {
+    const app = express();
+    const logger = jest.fn();
+
+    app.get("/error", (req, res, next) => {
+      next(new ApiError("Bad Request", 400, "BAD_REQUEST"));
+    });
+    app.use(errorMiddleware({ logger }));
+
+    const res = await request(app)
+      .get("/error")
+      .set("x-request-id", "request-123");
+
+    expect(res.headers["x-request-id"]).toBe("request-123");
+    expect(logger).toHaveBeenCalledWith(
+      expect.any(ApiError),
+      expect.objectContaining({
+        requestId: "request-123",
+        method: "GET",
+        path: "/error",
+        statusCode: 400,
+        code: "BAD_REQUEST",
+      }),
+    );
+  });
+
+  test("should generate a request ID when one is not provided", async () => {
+    const app = express();
+
+    app.get("/error", (req, res, next) => {
+      next(new ApiError("Bad Request", 400, "BAD_REQUEST"));
+    });
+    app.use(errorMiddleware({ requestId: { generator: () => "generated-123" } }));
+
+    const res = await request(app).get("/error");
+
+    expect(res.headers["x-request-id"]).toBe("generated-123");
+  });
+
+  test("should add correlation IDs to successful requests", async () => {
+    const app = express();
+
+    app.use(requestIdMiddleware({ generator: () => "success-123" }));
+    app.get("/success", (req, res) => {
+      res.json({ ok: true });
+    });
+
+    const res = await request(app).get("/success");
+
+    expect(res.headers["x-request-id"]).toBe("success-123");
+  });
+
+  test("should return RFC 9457-style problem details when enabled", async () => {
+    const app = express();
+
+    app.get("/error", (req, res, next) => {
+      next(new ApiError("Bad Request", 400, "BAD_REQUEST"));
+    });
+    app.use(errorMiddleware({ responseFormat: "problem" }));
+
+    const res = await request(app)
+      .get("/error")
+      .set("x-request-id", "request-456");
+
+    expect(res.type).toBe("application/problem+json");
+    expect(res.body).toMatchObject({
+      type: "urn:express-error-kit:BAD_REQUEST",
+      title: "ApiError",
+      status: 400,
+      detail: "Bad Request",
+      instance: "/error",
+      code: "BAD_REQUEST",
+      requestId: "request-456",
+    });
+  });
+
+  test("should use a custom response serializer and exposure policy", async () => {
+    const app = express();
+    const serializer = jest.fn((error, context) => ({
+      message: context.exposeMessage ? error.message : "redacted",
+      requestId: context.requestId,
+    }));
+
+    app.get("/error", (req, res, next) => {
+      next(new ApiError("private details", 400, "PRIVATE_ERROR"));
+    });
+    app.use(errorMiddleware({ expose: false, serializer }));
+
+    const res = await request(app).get("/error");
+
+    expect(res.body).toMatchObject({
+      message: "redacted",
+      requestId: expect.any(String),
+    });
+    expect(serializer).toHaveBeenCalledWith(
+      expect.any(ApiError),
+      expect.objectContaining({ exposeMessage: false }),
+    );
+  });
+
+  test("should accept adapters registered through a reusable registry", async () => {
+    const registry = new ErrorAdapterRegistry().register((error) => {
+      if (error instanceof Error && error.message === "known") {
+        return new ApiError("Known error", 422, "KNOWN_ERROR");
+      }
+
+      return undefined;
+    });
+    const app = express();
+
+    app.get("/error", (req, res, next) => {
+      next(new Error("known"));
+    });
+    app.use(errorMiddleware({ adapters: registry }));
+
+    const res = await request(app).get("/error");
+
+    expect(res.status).toBe(422);
+    expect(res.body.code).toBe("KNOWN_ERROR");
   });
 
   test("should format Zod v4 issues", async () => {
