@@ -11,7 +11,9 @@ export const errorMiddleware =
         return;
       }
 
-      const processedError = normalizeError(err);
+      const processedError = normalizeError(err, [
+        ...(options.adapters ?? []),
+      ]);
 
       if (options.logger) {
         options.logger(processedError);

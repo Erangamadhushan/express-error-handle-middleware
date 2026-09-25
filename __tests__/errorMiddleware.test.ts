@@ -51,6 +51,40 @@ describe("errorMiddleware", () => {
     expect(res.body.message).not.toContain("database");
   });
 
+  test("should support custom error adapters", async () => {
+    const app = express();
+
+    app.get("/error", (req, res, next) => {
+      next({ type: "domain_error", detail: "Invalid state" });
+    });
+
+    app.use(errorMiddleware({
+      logger: jest.fn(),
+      adapters: [
+        (error) => {
+          if (
+            typeof error === "object" &&
+            error !== null &&
+            "type" in error &&
+            error.type === "domain_error"
+          ) {
+            return new ApiError("The resource is in an invalid state", 409, "INVALID_STATE");
+          }
+
+          return undefined;
+        },
+      ],
+    }));
+
+    const res = await request(app).get("/error");
+
+    expect(res.status).toBe(409);
+    expect(res.body).toMatchObject({
+      message: "The resource is in an invalid state",
+      code: "INVALID_STATE",
+    });
+  });
+
   test("should format Zod v4 issues", async () => {
     const app = express();
 
