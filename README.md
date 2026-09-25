@@ -34,6 +34,14 @@ Advanced TypeScript-based error handling middleware for Express.js.
 npm install @erangamadhushan/express-advanced-error-kit
 ```
 
+## Compatibility
+
+- Node.js 18.18 or newer
+- Express 4.18 or newer, including Express 5
+- Zod 4 is optional and only required when using Zod validation errors
+
+Express is a peer dependency because the middleware uses the host application's Express runtime. The package does not bundle Express, Zod, or other runtime dependencies.
+
 ## 🚀 Quick Start
 
 ```ts
