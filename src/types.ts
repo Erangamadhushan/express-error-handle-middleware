@@ -1,4 +1,4 @@
 export interface ErrorMiddlewareOptions {
-  logger?: (error: any) => void;
+  logger?: (error: unknown) => void;
   showStack?: boolean;
 }
