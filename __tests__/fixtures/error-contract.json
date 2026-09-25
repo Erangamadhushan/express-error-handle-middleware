@@ -1,0 +1,16 @@
+{
+  "badRequest": {
+    "success": false,
+    "statusCode": 400,
+    "message": "Invalid input",
+    "error": "ApiError",
+    "code": "BAD_REQUEST"
+  },
+  "unknown": {
+    "success": false,
+    "statusCode": 500,
+    "message": "Internal Server Error",
+    "error": "ApiError",
+    "code": "INTERNAL_ERROR"
+  }
+}
