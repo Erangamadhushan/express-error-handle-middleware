@@ -24,8 +24,8 @@ Every public package change should run:
 
 ```text
 npm ci
-npm test -- --runInBand
-npx tsc --noEmit
+npm run typecheck
+npm run test:ci
 npm run build
 npm run smoke:package
 ```

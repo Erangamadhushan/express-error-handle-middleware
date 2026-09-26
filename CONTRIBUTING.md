@@ -4,7 +4,7 @@
 
 git clone https://github.com/Erangamadhushan/express-error-handle-middleware
 npm install
-npm test
+npm run test:ci
 
 ## Branch Naming
 
@@ -47,8 +47,8 @@ Preferred validation sequence:
 
 ```bash
 npm ci
-npm test -- --runInBand
-npx tsc --noEmit
+npm run typecheck
+npm run test:ci
 npm run build
 npm run smoke:package
 ```

@@ -31,7 +31,6 @@ try {
       "install",
       "--no-save",
       "--ignore-scripts",
-      "--legacy-peer-deps",
       join(smokeDirectory, filename),
     ],
     { cwd: smokeDirectory, stdio: "inherit" },

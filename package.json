@@ -17,6 +17,8 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
+    "typecheck": "tsc --noEmit",
+    "test:ci": "jest --coverage --runInBand",
     "smoke:package": "npm run build && node scripts/verify-package.mjs",
     "prepublishOnly": "npm run build",
     "test": "jest --coverage"
@@ -38,6 +40,9 @@
     "url": "https://github.com/Erangamadhushan/express-error-handle-middleware/issues"
   },
   "homepage": "https://github.com/Erangamadhushan/express-error-handle-middleware#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18.18"
   },
